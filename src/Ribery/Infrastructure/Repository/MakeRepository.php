@@ -65,7 +65,30 @@ class MakeRepository implements IMakeRepository
 
     public function update(Make $make){}
 
-    public function create(Make $make){}
+    public function create(Make $make){
+        try {
+
+            $stmt = $this->database->prepare("
+                INSERT INTO 
+                    `tb_make` (name, description, website, image)
+                    VALUES 
+                    (:name, :description, :website, :image)
+            ");
+
+            $stmt->bindParam(":name", $make->getName());
+            $stmt->bindParam(":description", $make->getDescription());
+            $stmt->bindParam(":website", $make->getWebsite());
+            $stmt->bindParam(":image", $make->getImage());
+            
+            if ($stmt->execute())
+                $make->setId((int)$stmt->last_inserted_id);
+
+            return $make;
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 
     public function remove($makeId){}
 }

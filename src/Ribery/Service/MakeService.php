@@ -31,4 +31,24 @@ class MakeService
             throw $e;
         }
     }
+
+    public function create(Make $make)
+    {
+        try
+        {
+            if (false === $make->isValid())
+                throw new InvalidArgumentException('Invalid make model');
+
+            $repository = new MakeRepository($this->database);
+            $makeId = $repository->create($make);
+
+            if (!empty($makeId))
+                $make->setId($makeId);
+
+            return $make;
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }
