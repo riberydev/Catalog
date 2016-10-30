@@ -36,7 +36,7 @@ class PdoUnitOfWork implements IUnitOfWork
             $this->connection = new PDO($this->dsn, $this->user, $this->pass, $options);
 
         } catch(PDOException $e) {
-            $this->connecloseConnection();
+            $this->closeConnection();
             throw $e;
         }
     }

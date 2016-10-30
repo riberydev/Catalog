@@ -9,6 +9,7 @@ date_default_timezone_set('America/Sao_Paulo');
 define('PS', PATH_SEPARATOR);
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT_PATH', realpath(__DIR__) . DS);
+define('LOG_PATH', ROOT_PATH . '..' . DS . 'log' . DS);
 
 
 set_include_path(

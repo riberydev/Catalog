@@ -5,15 +5,17 @@ use \Exception;
 use \Respect\Rest\Routable;
 
 
-class IndexController implements Routable
+class IndexController extends BaseController implements Routable
 {
     public function __construct()
     {
+        parent::__construct();
     }
 
     public function get()
     {        
-        echo 'Hello';
+        $this->ok('');
+        $this->response->send();
     }
     
     public function delete()

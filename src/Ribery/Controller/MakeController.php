@@ -26,10 +26,12 @@ class MakeController extends BaseController implements Routable
             $this->ok($service->getAll());
 
         } catch (Exception $e) {
-            $this->error($e->getMessage(), $e->getCode());
+            $this->error($e->getMessage());
         }
 
-        return $response->send();
+        $this->response->send();
+
+        return;
     }
 
     public function post()
@@ -54,7 +56,7 @@ class MakeController extends BaseController implements Routable
             if (!empty($makeModel->getId())) {
                 $this->buildResponse($make, 'Created', Response::HTTP_CREATED);
                 
-                return $this->response->send();
+                $this->response->send();
             }
 
         } catch (InvalidArgumentException $e) {
@@ -64,7 +66,9 @@ class MakeController extends BaseController implements Routable
             $this->error($e->getMessage(), $e->getCode());
         }
 
-        return $this->response->send();
+        $this->response->send();
+
+        return;
     }
     
     public function delete($id)
