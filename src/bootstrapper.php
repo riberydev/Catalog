@@ -10,6 +10,7 @@ define('PS', PATH_SEPARATOR);
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT_PATH', realpath(__DIR__) . DS);
 define('LOG_PATH', ROOT_PATH . '..' . DS . 'log' . DS);
+define('CONFIG_PATH', ROOT_PATH . 'Ribery' . DS . 'Config' . DS);
 
 
 set_include_path(

@@ -5,28 +5,29 @@ use \Exception;
 use \InvalidArgumentException;
 use \Respect\Rest\Routable;
 use \Ribery\Service\MakeService;
+use \Ribery\Domain\Contracts\Service\IMakeService;
 use \Symfony\Component\HttpFoundation\Request;
 use \Symfony\Component\HttpFoundation\Response;
 
 class MakeController extends BaseController implements Routable
 {
-    private $database;
+    private $service;
 
-    public function __construct()
+    public function __construct(IMakeService $service)
     {
         parent::__construct();
+
+        $this->service = $service;
     }
 
     public function get($id = null)
     {
         try
         {
-            $service = new MakeService();
-
-            $this->ok($service->getAll());
+            $this->ok($this->service->getAll());
 
         } catch (Exception $e) {
-            $this->error($e->getMessage());
+            $this->error('Servidor temporariamente fora de serviço. Tente novamente mais tarde');
         }
 
         $this->response->send();
@@ -50,8 +51,7 @@ class MakeController extends BaseController implements Routable
                 throw new InvalidArgumentException('Description is invalid.');
 
             $makeModel = new Make($name, $desc, $website, $image);
-            $service = new MakeService();
-            $makeModel = $service->create($make);
+            $makeModel = $this->service->create($make);
 
             if (!empty($makeModel->getId())) {
                 $this->buildResponse($make, 'Created', Response::HTTP_CREATED);
@@ -63,7 +63,7 @@ class MakeController extends BaseController implements Routable
             $this->error($e->getMessage(), $e->getCode());
 
         } catch (Exception $e) {
-            $this->error($e->getMessage(), $e->getCode());
+            $this->error('Servidor temporariamente fora de serviço. Tente novamente mais tarde');
         }
 
         $this->response->send();

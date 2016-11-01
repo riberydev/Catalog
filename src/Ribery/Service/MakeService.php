@@ -2,32 +2,20 @@
 namespace Ribery\Service;
 
 use \Exception;
-use \Ribery\Infrastructure\UnitOfWork\PdoUnitOfWork;
 use \Ribery\Infrastructure\Repository\MakeRepository;
-use \Respect\Config\Container;
-use \Monolog\Logger;
-use \Monolog\Handler\StreamHandler;
-use \Monolog\Formatter\LineFormatter;
+use \Ribery\Infrastructure\UnitOfWork\IUnitOfWork;
+use \Ribery\Domain\Contracts\Service\IMakeService;
+use Psr\Log\LoggerInterface;
 
-
-class MakeService
+class MakeService implements IMakeService
 {
     private $database;
     private $logger;
 
-    public function __construct()
+    public function __construct(IUnitOfWork $database, LoggerInterface $logger)
     {
-        //TODO: Implement a DI container
-        $c = new Container(ROOT_PATH . 'Ribery/Config/database.ini');    
-        $this->database = new PdoUnitOfWork($c->db_dsn, $c->db_user, $c->db_pass);
-
-        $dateFormat = "Y-m-d H:i:s";
-        $output = "[%datetime%] %channel%.%level_name%: %message% %context% %extra%" . PHP_EOL . PHP_EOL;
-        $formatter = new LineFormatter($output, $dateFormat);
-        $logHandler = new StreamHandler(sprintf("%smake_%s.log", LOG_PATH, date('ymdhis')));
-        $logHandler->setFormatter($formatter);
-        $this->logger = new Logger("Make");
-        $this->logger->pushHandler($logHandler);
+        $this->database = $database;
+        $this->logger = $logger;
     }
 
     public function getAll()

@@ -43,7 +43,8 @@ class PdoUnitOfWork implements IUnitOfWork
 
     public function closeConnection()
     {
-        $this->connection = null;
+        if ($this->connection !== null)
+            $this->connection = null;
     }
 
     public function getConnection()
